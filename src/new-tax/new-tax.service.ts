@@ -1,4 +1,11 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+} from "@nestjs/common";
+import { Inject, Req, Res } from "@nestjs/common/decorators";
+import { newtax } from "src/db/entities/newTax.tbl.entity";
 import {
   standardDiduction,
   NewTaxInputDto,
@@ -10,11 +17,19 @@ import {
   maxsection80TTA,
 } from "src/dto/Request/taxInputDto";
 
+import { DataSource, Repository } from "typeorm";
+
 @Injectable()
 export class NewTaxService {
-  constructor() {}
+  private AdminRepo: Repository<newtax>;
+  constructor(
+    @Inject("DataSource")
+    private dataSource: DataSource
+  ) {
+    this.AdminRepo = this.dataSource.getRepository(newtax);
+  }
 
-  taxCal(newtaxInputDto: NewTaxInputDto) {
+  async taxCal(newtaxInputDto: NewTaxInputDto, myData1) {
     let { amount } = newtaxInputDto;
 
     let tax = 0;
@@ -43,6 +58,20 @@ export class NewTaxService {
       }
     }
 
+    let log = myData1.log;
+    let body = myData1.body.amount;
+
+    const data = this.AdminRepo.create({
+      log,
+      body,
+      tax,
+    });
+
+    try {
+      this.AdminRepo.save(data);
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
     return tax;
   }
 
@@ -76,8 +105,6 @@ export class NewTaxService {
       );
     }
 
-    console.log("helloThis is dbConn");
-
     let tax = 0;
     // console.log(valueZones);
 
@@ -102,7 +129,6 @@ export class NewTaxService {
           nowAmount = currentAmount;
           tax += (changeAmount * OldValueZones[j].per) / 100;
         }
-
         break;
       }
     }
