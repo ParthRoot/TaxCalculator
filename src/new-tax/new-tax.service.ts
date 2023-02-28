@@ -76,6 +76,8 @@ export class NewTaxService {
       );
     }
 
+    console.log("helloThis is dbConn");
+
     let tax = 0;
     // console.log(valueZones);
 
