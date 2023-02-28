@@ -61,10 +61,13 @@ export class NewTaxService {
     let log = myData1.log;
     let body = myData1.body.amount;
 
+    let typeTax = "new";
+
     const data = this.AdminRepo.create({
       log,
-      body,
+      amount: body,
       tax,
+      typeTax,
     });
 
     try {
@@ -75,7 +78,7 @@ export class NewTaxService {
     return tax;
   }
 
-  oldTaxCal(oldtaxInputDto: OldTaxInputDto) {
+  oldTaxCal(oldtaxInputDto: OldTaxInputDto, myData1) {
     let { amount, section80C, section80D, section80TTA } = oldtaxInputDto;
 
     if (section80D > maxsection80D) {
@@ -116,8 +119,6 @@ export class NewTaxService {
 
     let nowAmount = latestAmount; // amount - standardDiduction
 
-    console.log("nowAmount", nowAmount);
-
     for (let i = 0; i < OldValueZones.length; i++) {
       if (
         latestAmount > OldValueZones[i].minVal &&
@@ -131,6 +132,24 @@ export class NewTaxService {
         }
         break;
       }
+    }
+
+    let log = myData1.log;
+    let body = myData1.body.amount;
+
+    let typeTax = "old";
+
+    const data = this.AdminRepo.create({
+      log,
+      amount: body,
+      tax,
+      typeTax,
+    });
+
+    try {
+      this.AdminRepo.save(data);
+    } catch (error) {
+      throw new InternalServerErrorException();
     }
     // console.log(oldtaxInputDto);
     return tax;

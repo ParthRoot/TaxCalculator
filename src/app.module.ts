@@ -13,6 +13,6 @@ import { LoggerMiddleware } from "./middleware/log.middleware";
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes("new-tax/new");
+    consumer.apply(LoggerMiddleware).forRoutes(NewTaxController);
   }
 }

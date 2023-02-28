@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, Column } from "typeorm";
+import { PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm";
 import { Entity } from "typeorm/decorator/entity/Entity";
 
 @Entity()
@@ -10,8 +10,14 @@ export class newtax {
   log: string;
 
   @Column({ nullable: true })
-  body: number;
+  amount: number;
 
   @Column({ nullable: true })
   tax: number;
+
+  @Column({ nullable: true })
+  typeTax: string;
+
+  @CreateDateColumn()
+  time: Date;
 }

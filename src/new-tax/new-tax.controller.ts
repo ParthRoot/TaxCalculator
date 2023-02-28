@@ -17,7 +17,8 @@ export class NewTaxController {
   }
 
   @Get("old")
-  oldTaxCal(@Body() oldtaxInputDto: OldTaxInputDto): number {
-    return this.newTaxService.oldTaxCal(oldtaxInputDto);
+  oldTaxCal(@Req() req, @Body() oldtaxInputDto: OldTaxInputDto): number {
+    const myData1 = req.headers;
+    return this.newTaxService.oldTaxCal(oldtaxInputDto, myData1);
   }
 }
