@@ -1,4 +1,5 @@
 import { DataSource } from "typeorm";
+import { authUser } from "./entities/auth.entity";
 import { newtax } from "./entities/newTax.tbl.entity";
 
 export const dataSource = [
@@ -13,7 +14,7 @@ export const dataSource = [
         password: "root",
         database: "income_tax_cal",
         synchronize: true,
-        entities: [newtax],
+        entities: [newtax, authUser],
       });
       return await ds.initialize();
     },

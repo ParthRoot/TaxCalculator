@@ -5,9 +5,10 @@ import { MiddlewareConsumer } from "@nestjs/common/interfaces/middleware/middlew
 // import { LogMiddleWare } from "./middleware/log.middleware";
 import { NewTaxController } from "./new-tax/new-tax.controller";
 import { LoggerMiddleware } from "./middleware/log.middleware";
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [NewTaxModule, DbModule],
+  imports: [NewTaxModule, DbModule, AuthModule],
   controllers: [],
   providers: [],
 })
