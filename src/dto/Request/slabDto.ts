@@ -8,6 +8,7 @@ import {
 } from "class-validator";
 
 export class CustomSlabDTO {
+  @IsString()
   name: string;
 
   @IsArray()

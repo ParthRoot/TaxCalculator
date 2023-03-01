@@ -5,7 +5,7 @@ import {
   Injectable,
   InternalServerErrorException,
 } from "@nestjs/common";
-import { Inject, Req, Res } from "@nestjs/common/decorators";
+import { Inject } from "@nestjs/common/decorators";
 import { newtax } from "src/db/entities/newTax.tbl.entity";
 import { slabtable } from "src/db/entities/slab.tbl.entity";
 import { CustomSlabDTO } from "src/dto/Request/slabDto";
@@ -37,10 +37,7 @@ export class NewTaxService {
   async taxCal(newtaxInputDto: NewTaxInputDto, myData1) {
     let { amount, name } = newtaxInputDto;
 
-    console.log(name);
-
     let tax = 0;
-    // console.log(valueZones);
 
     const latestAmount = amount - standardDiduction; // amount after diduction
 
@@ -72,13 +69,9 @@ export class NewTaxService {
         ).slab
       );
       let newSlabName = slabName.slab;
-      // console.log("old", newSlabName[3].maxVal);
-      // newSlabName[3].maxVal = Infinity;
-      // console.log("new", newSlabName[3].max);
 
       for (let i = 0; i < newSlabName.length; i++) {
-        // console.log("new", newSlabName[i].maxVal);
-        if (newSlabName[i].maxVal == "Infinity") {
+        if (newSlabName[i].maxVal == "infinity") {
           newSlabName[i].maxVal = Infinity;
         }
         if (
@@ -131,13 +124,7 @@ export class NewTaxService {
       section80TTA = maxsection80TTA;
     }
 
-    // console.log("Amount", amount);
-    // console.log("section80C", section80C);
-    // console.log("section80D", section80D);
-    // console.log("section80TTA", section80TTA);
     let a = section80C + section80D + section80TTA;
-
-    // console.log("section80c", section80C);
 
     if (a > amount) {
       throw new HttpException(
@@ -147,15 +134,14 @@ export class NewTaxService {
     }
 
     let tax = 0;
-    // console.log(valueZones);
 
     const latestAmount =
       amount - standardDiduction - section80C - section80D - section80TTA; // amount after diduction
 
-    let changeAmount; // changeAmount Slab vise
+    let changeAmount;
     let currentAmount;
 
-    let nowAmount = latestAmount; // amount - standardDiduction
+    let nowAmount = latestAmount;
 
     if (name == "undefined") {
       for (let i = 0; i < OldValueZones.length; i++) {
@@ -179,15 +165,12 @@ export class NewTaxService {
         ).slab
       );
       let newSlabName = slabName.slab;
-      // console.log("old", newSlabName[3].maxVal);
-      // newSlabName[3].maxVal = Infinity;
-      // console.log("new", newSlabName[3].max);
 
       for (let i = 0; i < newSlabName.length; i++) {
-        if (newSlabName[i].maxVal == "Infinity") {
+        if (newSlabName[i].maxVal == "infinity") {
           newSlabName[i].maxVal = Infinity;
         }
-        // console.log("new", newSlabName[i].maxVal);
+
         if (
           latestAmount > newSlabName[i].minVal &&
           latestAmount <= newSlabName[i].maxVal
@@ -220,17 +203,13 @@ export class NewTaxService {
     } catch (error) {
       throw new InternalServerErrorException();
     }
-    // console.log(oldtaxInputDto);
     return tax;
   }
 
   async createSlab(customSlabDTO: CustomSlabDTO) {
-    // console.log(customSlabDTO.slab);
     let { name } = customSlabDTO;
 
     let slab1 = customSlabDTO.slab;
-
-    // console.log("name", name);
 
     let slab = JSON.stringify({
       slab: slab1,
@@ -243,6 +222,7 @@ export class NewTaxService {
 
     try {
       await this.AdminRepo1.save(data);
+      return "Slab Added Successfully";
     } catch (error) {
       if (error.code === "23505") {
         throw new ConflictException("user name already exists");
