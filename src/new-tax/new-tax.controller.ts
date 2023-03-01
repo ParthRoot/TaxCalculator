@@ -1,5 +1,11 @@
 import { Body, Controller, Get, ParseIntPipe } from "@nestjs/common";
-import { Req, Res, UseInterceptors } from "@nestjs/common/decorators";
+import {
+  Req,
+  Res,
+  UseGuards,
+  UseInterceptors,
+} from "@nestjs/common/decorators";
+import { AuthGuard } from "@nestjs/passport";
 import { NewTaxInputDto, OldTaxInputDto } from "src/dto/Request/taxInputDto";
 // import { AppInterceptor } from "src/middleware/log.middleware";
 import { NewTaxService } from "./new-tax.service";
@@ -9,7 +15,9 @@ export class NewTaxController {
   constructor(private newTaxService: NewTaxService) {}
 
   // @UseInterceptors(AppInterceptor)
+
   @Get("new")
+  @UseGuards(AuthGuard("jwt"))
   taxCal(@Req() req, @Body() newtaxInputDto: NewTaxInputDto): any {
     const myData1 = req.headers;
 
