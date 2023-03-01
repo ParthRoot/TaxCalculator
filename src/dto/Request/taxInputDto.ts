@@ -1,10 +1,13 @@
 import { ValidationPipe } from "@nestjs/common";
-import { IsNumber, Max, Min } from "class-validator";
+import { IsNumber, IsString, Max, Min } from "class-validator";
 
 export class NewTaxInputDto {
   @IsNumber({}, { message: "Please Enter Valid Number" })
   @Min(0)
   amount: number;
+
+  @IsString({ message: "Name is always string" })
+  name: string = "undefined";
 }
 
 export class OldTaxInputDto {
@@ -26,6 +29,9 @@ export class OldTaxInputDto {
   @IsNumber({}, { message: "Please Enter Valid Number" })
   @Min(0)
   amount: number;
+
+  @IsString({ message: "Name is always string" })
+  name: string = "undefined";
 }
 
 //old Tax

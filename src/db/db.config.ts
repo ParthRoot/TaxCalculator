@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm";
 import { newtax } from "./entities/newTax.tbl.entity";
+import { slabtable } from "./entities/slab.tbl.entity";
 
 export const dataSource = [
   {
@@ -13,7 +14,7 @@ export const dataSource = [
         password: "root",
         database: "income_tax_cal",
         synchronize: true,
-        entities: [newtax],
+        entities: [newtax, slabtable],
       });
       return await ds.initialize();
     },
