@@ -4,6 +4,7 @@ import {
   HttpStatus,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from "@nestjs/common";
 import { Inject } from "@nestjs/common/decorators";
 import { newtax } from "src/db/entities/newTax.tbl.entity";
@@ -34,8 +35,16 @@ export class NewTaxService {
     this.AdminRepo1 = this.dataSource.getRepository(slabtable);
   }
 
+  // newTaxCal -----------------------------------------------------------------------
+
   async taxCal(newtaxInputDto: NewTaxInputDto, myData1) {
     let { amount, name } = newtaxInputDto;
+
+    console.log("Length", amount.toString().length);
+    console.log(amount.toString());
+    if (amount.toString().length >= 20) {
+      throw new HttpException("RangeOutofBound", HttpStatus.NOT_ACCEPTABLE);
+    }
 
     let tax = 0;
 
@@ -45,7 +54,7 @@ export class NewTaxService {
     let currentAmount;
 
     let nowAmount = latestAmount; // amount - standardDiduction
-
+    let typeTax = "new";
     if (name == "undefined") {
       for (let i = 0; i < NewValueZones.length; i++) {
         if (
@@ -58,16 +67,22 @@ export class NewTaxService {
             nowAmount = currentAmount;
             tax += (changeAmount * NewValueZones[j].per) / 100;
           }
-
           break;
         }
       }
     } else {
-      const slabName = JSON.parse(
-        await (
-          await this.AdminRepo1.findOneBy({ name })
-        ).slab
-      );
+      typeTax = name;
+      let slabName;
+      try {
+        slabName = JSON.parse(
+          await (
+            await this.AdminRepo1.findOneBy({ name })
+          ).slab
+        );
+      } catch (error) {
+        throw new NotFoundException(`${name} slab is not found`);
+      }
+
       let newSlabName = slabName.slab;
 
       for (let i = 0; i < newSlabName.length; i++) {
@@ -92,8 +107,6 @@ export class NewTaxService {
     let log = myData1.log;
     let body = myData1.body.amount;
 
-    let typeTax = "new";
-
     const data = this.AdminRepo.create({
       log,
       amount: body,
@@ -104,13 +117,24 @@ export class NewTaxService {
     try {
       this.AdminRepo.save(data);
     } catch (error) {
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException("something went wrong");
     }
+
     return tax;
   }
 
+  // oldTaxCal -----------------------------------------------------------------------
   async oldTaxCal(oldtaxInputDto: OldTaxInputDto, myData1) {
     let { amount, section80C, section80D, section80TTA, name } = oldtaxInputDto;
+
+    if (
+      amount.toString().length >= 20 ||
+      section80D.toString().length >= 20 ||
+      section80C.toString().length >= 20 ||
+      section80TTA.toString().length >= 20
+    ) {
+      throw new HttpException("RangeOutofBound", HttpStatus.NOT_ACCEPTABLE);
+    }
 
     if (section80D > maxsection80D) {
       section80D = maxsection80D;
@@ -143,6 +167,8 @@ export class NewTaxService {
 
     let nowAmount = latestAmount;
 
+    let typeTax = "old";
+
     if (name == "undefined") {
       for (let i = 0; i < OldValueZones.length; i++) {
         if (
@@ -159,11 +185,17 @@ export class NewTaxService {
         }
       }
     } else {
-      const slabName = JSON.parse(
-        await (
-          await this.AdminRepo1.findOneBy({ name })
-        ).slab
-      );
+      typeTax = name;
+      let slabName;
+      try {
+        slabName = JSON.parse(
+          await (
+            await this.AdminRepo1.findOneBy({ name })
+          ).slab
+        );
+      } catch (error) {
+        throw new NotFoundException(`${name} slab is not found`);
+      }
       let newSlabName = slabName.slab;
 
       for (let i = 0; i < newSlabName.length; i++) {
@@ -189,8 +221,6 @@ export class NewTaxService {
     let log = myData1.log;
     let body = myData1.body.amount;
 
-    let typeTax = "old";
-
     const data = this.AdminRepo.create({
       log,
       amount: body,
@@ -206,6 +236,7 @@ export class NewTaxService {
     return tax;
   }
 
+  // createSlab -----------------------------------------------------------------------
   async createSlab(customSlabDTO: CustomSlabDTO) {
     let { name } = customSlabDTO;
 

@@ -1,35 +1,57 @@
-import { ValidationPipe } from "@nestjs/common";
-import { IsNumber, IsString, Max, Min } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger/dist";
+import { IsNumber, IsString, Min } from "class-validator";
 
 export class NewTaxInputDto {
   @IsNumber({}, { message: "Please Enter Valid Number" })
+  @ApiProperty({ description: "amount for calculate tax" })
   @Min(0)
   amount: number;
 
+  @ApiProperty({
+    description: "name of slab",
+    default: "undefined",
+  })
   @IsString({ message: "Name is always string" })
   name: string = "undefined";
 }
 
 export class OldTaxInputDto {
+  @ApiProperty({
+    description: "secrtion80C amount",
+  })
   @IsNumber({}, { message: "Please Enter Valid Number" })
   // @Max(150000)
+  @ApiProperty()
   @Min(0)
   section80C: number; //max value 150000
 
+  @ApiProperty({
+    description: "section80D amount",
+  })
   @IsNumber({}, { message: "Please Enter Valid Number" })
   // @Max(50000)
   @Min(0)
   section80D: number; // max value 50000
 
+  @ApiProperty({
+    description: "section80TTA amount",
+  })
   @IsNumber({}, { message: "Please Enter Valid Number" })
   // @Max(10000)
   @Min(0)
   section80TTA: number; // max value 10000
 
+  @ApiProperty({
+    description: "amount for calculate tax",
+  })
   @IsNumber({}, { message: "Please Enter Valid Number" })
   @Min(0)
   amount: number;
 
+  @ApiProperty({
+    description: "name of slab",
+    default: "undefined",
+  })
   @IsString({ message: "Name is always string" })
   name: string = "undefined";
 }
