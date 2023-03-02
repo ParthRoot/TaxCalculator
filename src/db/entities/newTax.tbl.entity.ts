@@ -9,10 +9,10 @@ export class newtax {
   @Column()
   log: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "bigint" })
   amount: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "bigint" })
   tax: number;
 
   @Column({ nullable: true })
