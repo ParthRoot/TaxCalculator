@@ -16,17 +16,17 @@ export class NewTaxController {
 
   // @UseInterceptors(AppInterceptor)
 
-  @Get("new")
   @UseGuards(AuthGuard("jwt"))
+  @Get("new")
   taxCal(@Req() req, @Body() newtaxInputDto: NewTaxInputDto): any {
-    const myData1 = req.headers;
+    const myData1 = req.headers.data;
 
     return this.newTaxService.taxCal(newtaxInputDto, myData1);
   }
 
   @Get("old")
   oldTaxCal(@Req() req, @Body() oldtaxInputDto: OldTaxInputDto): number {
-    const myData1 = req.headers;
+    const myData1 = req.headers.data;
     return this.newTaxService.oldTaxCal(oldtaxInputDto, myData1);
   }
 }

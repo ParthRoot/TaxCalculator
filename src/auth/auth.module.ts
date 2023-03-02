@@ -11,12 +11,12 @@ import { JwtStrategy } from "./jwt.strategy";
     JwtModule.register({
       secret: "key",
       signOptions: {
-        expiresIn: "1000s",
-      },  
+        expiresIn: 3600,
+      },
     }),
   ],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
-  exports: [JwtStrategy, PassportModule],
+  exports: [JwtStrategy],
 })
 export class AuthModule {}

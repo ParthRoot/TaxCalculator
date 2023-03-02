@@ -14,13 +14,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: "key",
     });
   }
-  async validate(payload: JwtPayload): Promise<any> {
+   validate(payload) {
     const { email } = payload;
-    const user = await this.AdminRepo.findOneBy({ email });
+    console.log("Payload", payload);
+    // const user = await this.AdminRepo.findOneBy({ email });
 
-    if (!user) {
-      throw new UnauthorizedException();
-    }
+    // if (!user) {
+    //   throw new UnauthorizedException();
+    // }
     return payload;
   }
 }
