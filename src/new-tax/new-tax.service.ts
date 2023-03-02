@@ -37,7 +37,7 @@ export class NewTaxService {
 
   // newTaxCal -----------------------------------------------------------------------
 
-  async taxCal(newtaxInputDto: NewTaxInputDto, myData1) {
+  async taxCal(newtaxInputDto: NewTaxInputDto, myData1, uemail) {
     let { amount, name } = newtaxInputDto;
 
     console.log("Length", amount.toString().length);
@@ -72,13 +72,23 @@ export class NewTaxService {
       }
     } else {
       typeTax = name;
+      let email = uemail;
       let slabName;
       try {
+        let uemail = await this.AdminRepo1.findBy({ email });
+
         slabName = JSON.parse(
-          await (
-            await this.AdminRepo1.findOneBy({ name })
-          ).slab
+          uemail.find((uemail) => uemail.name == name).slab
         );
+
+        // slabName = JSON.parse(
+        //   await (
+        //     await this.AdminRepo1.findOneBy({ name })
+        //   ).slab
+        // );
+
+        // console.log(slabName);
+        console.log(slabName);
       } catch (error) {
         throw new NotFoundException(`${name} slab is not found`);
       }
@@ -124,7 +134,7 @@ export class NewTaxService {
   }
 
   // oldTaxCal -----------------------------------------------------------------------
-  async oldTaxCal(oldtaxInputDto: OldTaxInputDto, myData1) {
+  async oldTaxCal(oldtaxInputDto: OldTaxInputDto, myData1, uemail) {
     let { amount, section80C, section80D, section80TTA, name } = oldtaxInputDto;
 
     if (
@@ -186,13 +196,19 @@ export class NewTaxService {
       }
     } else {
       typeTax = name;
+      let email = uemail;
       let slabName;
       try {
+        let uemail = await this.AdminRepo1.findBy({ email });
+
         slabName = JSON.parse(
-          await (
-            await this.AdminRepo1.findOneBy({ name })
-          ).slab
+          uemail.find((uemail) => uemail.name == name).slab
         );
+        // slabName = JSON.parse(
+        //   await (
+        //     await this.AdminRepo1.findOneBy({ name })
+        //   ).slab
+        // );
       } catch (error) {
         throw new NotFoundException(`${name} slab is not found`);
       }
@@ -237,10 +253,20 @@ export class NewTaxService {
   }
 
   // createSlab -----------------------------------------------------------------------
-  async createSlab(customSlabDTO: CustomSlabDTO) {
+  async createSlab(customSlabDTO: CustomSlabDTO, email) {
     let { name } = customSlabDTO;
 
     let slab1 = customSlabDTO.slab;
+
+    let uemail = await this.AdminRepo1.findBy({ email });
+
+    var result = uemail.find((item) => item.name == name);
+
+    // console.log("result", result);
+
+    // console.log(uemail);
+
+    // console.log(uemail);
 
     let slab = JSON.stringify({
       slab: slab1,
@@ -249,17 +275,30 @@ export class NewTaxService {
     const data = this.AdminRepo1.create({
       name,
       slab,
+      email,
     });
 
     try {
-      await this.AdminRepo1.save(data);
-      return "Slab Added Successfully";
-    } catch (error) {
-      if (error.code === "23505") {
-        throw new ConflictException("user name already exists");
+      // console.log("first");
+      if (result == undefined) {
+        // console.log(result);
+
+        await this.AdminRepo1.save(data);
+        return "Slab Added Successfully";
       } else {
-        throw new InternalServerErrorException();
+        throw new ConflictException("user name already exists");
       }
+      // await this.AdminRepo1.save(data);
+    } catch (error) {
+      // throw new ConflictException("user name already exists");
+      throw new ConflictException("user name already exists");
+      // if (error.code === "23505") {
+
+      // } else {
+      //   throw new InternalServerErrorException("u");
+      // }
+
+      // throw new InternalServerErrorException("some thing went wrong");
     }
   }
 }

@@ -6,7 +6,10 @@ export class slabtable {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
-  @Column({ unique: true })
+  @Column()
+  email: string;
+
+  @Column()
   name: string;
 
   @Column()

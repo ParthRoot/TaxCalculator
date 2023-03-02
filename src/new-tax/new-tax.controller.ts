@@ -20,8 +20,8 @@ export class NewTaxController {
   @Post("new")
   taxCal(@Req() req, @Body() newtaxInputDto: NewTaxInputDto): any {
     const myData1 = req.headers.data;
-
-    return this.newTaxService.taxCal(newtaxInputDto, myData1);
+    const uemail = req.user.email;
+    return this.newTaxService.taxCal(newtaxInputDto, myData1, uemail);
   }
 
   @ApiResponse({ status: 201, description: "return tax in number" })
@@ -35,11 +35,15 @@ export class NewTaxController {
     @Body() oldtaxInputDto: OldTaxInputDto
   ): Promise<number> {
     const myData1 = req.headers.data;
-    return this.newTaxService.oldTaxCal(oldtaxInputDto, myData1);
+    const uemail = req.user.email;
+
+    return this.newTaxService.oldTaxCal(oldtaxInputDto, myData1, uemail);
   }
 
   @Post("createSlab")
-  createSlab(@Body() customSlabDTO: CustomSlabDTO) {
-    return this.newTaxService.createSlab(customSlabDTO);
+  @UseGuards(AuthGuard("jwt"))
+  createSlab(@Req() req, @Body() customSlabDTO: CustomSlabDTO) {
+    const uemail = req.user.email;
+    return this.newTaxService.createSlab(customSlabDTO, uemail);
   }
 }

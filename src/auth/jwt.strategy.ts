@@ -14,7 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: "key",
     });
   }
-   validate(payload) {
+  validate(payload) {
     const { email } = payload;
     console.log("Payload", payload);
     // const user = await this.AdminRepo.findOneBy({ email });
