@@ -41,6 +41,8 @@ export class NewTaxController {
   }
 
   @Post("createSlab")
+  @ApiResponse({ status: 201, description: "slab added successfully" })
+  @ApiResponse({ status: 409, description: "slab is already exist" })
   @UseGuards(AuthGuard("jwt"))
   createSlab(@Req() req, @Body() customSlabDTO: CustomSlabDTO) {
     const uemail = req.user.email;

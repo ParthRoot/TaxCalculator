@@ -247,7 +247,7 @@ export class NewTaxService {
     try {
       this.AdminRepo.save(data);
     } catch (error) {
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException("something went wrong");
     }
     return tax;
   }
@@ -286,12 +286,12 @@ export class NewTaxService {
         await this.AdminRepo1.save(data);
         return "Slab Added Successfully";
       } else {
-        throw new ConflictException("user name already exists");
+        throw new ConflictException("slab is already exists");
       }
       // await this.AdminRepo1.save(data);
     } catch (error) {
       // throw new ConflictException("user name already exists");
-      throw new ConflictException("user name already exists");
+      throw new ConflictException("slab is already exists");
       // if (error.code === "23505") {
 
       // } else {

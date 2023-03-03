@@ -39,12 +39,12 @@ export class AuthService {
 
     try {
       await this.AdminRepo.save(user);
-      console.log("success");
+      return "SignUp Successfully";
     } catch (error) {
       if (error.code === "23505") {
         throw new ConflictException("user name already exists");
       } else {
-        throw new InternalServerErrorException();
+        throw new InternalServerErrorException("something went wrong");
       }
     }
   }
@@ -58,7 +58,7 @@ export class AuthService {
       const payload: JwtPayload = { email };
 
       const accessToken: string = await this.jwtService.sign(payload);
-      return accessToken;
+      return `SignIn Successfully ${accessToken}`;
     } else {
       throw new UnauthorizedException("Please check your login credentials");
     }
