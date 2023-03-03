@@ -15,9 +15,9 @@ export class AuthController {
     return this.authService.signUp(authUserDto);
   }
 
-  @ApiResponse({ status: 201, description: "signIn Successfully access token" })
+  @ApiResponse({ status: 200, description: "signIn Successfully access token" })
   @ApiResponse({ status: 500, description: "something went wrong" })
-  @Get("login")
+  @Post("login")
   signIn(@Body() authUserDto: AuthUserDto) {
     return this.authService.signIn(authUserDto);
   }

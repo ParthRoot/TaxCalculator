@@ -40,8 +40,8 @@ export class NewTaxService {
   async taxCal(newtaxInputDto: NewTaxInputDto, myData1, uemail) {
     let { amount, name } = newtaxInputDto;
 
-    console.log("Length", amount.toString().length);
-    console.log(amount.toString());
+    // console.log("Length", amount.toString().length);
+    // console.log(amount.toString());
     if (amount.toString().length >= 20) {
       throw new HttpException("RangeOutofBound", HttpStatus.NOT_ACCEPTABLE);
     }
@@ -88,7 +88,6 @@ export class NewTaxService {
         // );
 
         // console.log(slabName);
-        console.log(slabName);
       } catch (error) {
         throw new NotFoundException(`${name} slab is not found`);
       }

@@ -3,13 +3,14 @@ import { IsNumber, IsString, Min } from "class-validator";
 
 export class NewTaxInputDto {
   @IsNumber({}, { message: "Please Enter Valid Number" })
-  @ApiProperty({ description: "amount for calculate tax" })
+  @ApiProperty({ description: "amount for calculate tax", example: 100000 })
   @Min(0)
   amount: number;
 
   @ApiProperty({
     description: "name of slab",
     default: "undefined",
+    example: "Parth",
   })
   @IsString({ message: "Name is always string" })
   name: string = "undefined";
@@ -18,6 +19,7 @@ export class NewTaxInputDto {
 export class OldTaxInputDto {
   @ApiProperty({
     description: "secrtion80C amount",
+    example: 150000,
   })
   @IsNumber({}, { message: "Please Enter Valid Number" })
   // @Max(150000)
@@ -27,6 +29,7 @@ export class OldTaxInputDto {
 
   @ApiProperty({
     description: "section80D amount",
+    example: 40000,
   })
   @IsNumber({}, { message: "Please Enter Valid Number" })
   // @Max(50000)
@@ -35,6 +38,7 @@ export class OldTaxInputDto {
 
   @ApiProperty({
     description: "section80TTA amount",
+    example: 8000,
   })
   @IsNumber({}, { message: "Please Enter Valid Number" })
   // @Max(10000)
@@ -43,6 +47,7 @@ export class OldTaxInputDto {
 
   @ApiProperty({
     description: "amount for calculate tax",
+    example: 1500000,
   })
   @IsNumber({}, { message: "Please Enter Valid Number" })
   @Min(0)
@@ -51,6 +56,7 @@ export class OldTaxInputDto {
   @ApiProperty({
     description: "name of slab",
     default: "undefined",
+    example: "Parth",
   })
   @IsString({ message: "Name is always string" })
   name: string = "undefined";

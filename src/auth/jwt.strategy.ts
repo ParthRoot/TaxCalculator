@@ -16,7 +16,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
   validate(payload) {
     const { email } = payload;
-    console.log("Payload", payload);
     // const user = await this.AdminRepo.findOneBy({ email });
 
     // if (!user) {

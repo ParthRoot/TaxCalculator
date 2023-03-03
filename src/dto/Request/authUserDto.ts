@@ -11,6 +11,7 @@ import {
 export class AuthUserDto {
   @ApiProperty({
     description: "email",
+    example: "parthitadara@gmail.com",
   })
   @IsNotEmpty()
   @IsEmail()
@@ -18,7 +19,7 @@ export class AuthUserDto {
   @MaxLength(50)
   email: string;
 
-  @ApiProperty({ description: "password" })
+  @ApiProperty({ description: "password", example: "Parth@123" })
   @IsNotEmpty()
   @IsString()
   @MinLength(5)
